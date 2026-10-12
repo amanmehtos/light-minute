@@ -75,6 +75,26 @@ Dark mode is the default.
 Typography is **Press Start 2P**, registered at runtime via
 `CTFontManagerRegisterFontsForURL`.
 
+### The icon
+
+<img src="docs/screenshots/appicon.png" width="520">
+
+A light minute is a distance — how far light travels in one minute — so the icon
+measures one rather than illustrating a clock. Five equal marks climb the grid to
+a larger lit head.
+
+The marks are flat ink at full strength, not a fading trail. An earlier pass faded
+them toward the ground, which looked better at 1024px and destroyed the idea at
+29pt: you cannot count marks you cannot see. The recession is carried by the
+rhythm of the gaps instead, so every mark survives at every size.
+
+It is drawn on the same 32×32 cell grid as the timer face and ships in three
+variants — sunlit, moonlit, and a grayscale master for iOS 18's tinted home
+screen. All three are opaque on a flat Diurnal ground rather than transparent:
+the system would otherwise composite its own gradient behind the dark and tinted
+versions, and a gradient is the one thing a surface lit by a single light cannot
+have.
+
 > **Known deviation:** Diurnal UI specifies Libre Baskerville and IBM Plex Mono.
 > This app deliberately uses Press Start 2P instead, to match the original Figma
 > design. The light model and monochrome rules are followed; the typography is not.
@@ -101,8 +121,10 @@ LightMinute/
 │   │   └── TimerViewModel.swift      Wall-clock anchored timekeeping
 │   ├── Views/                        MikeHeader, PixelButton, PixelTimer,
 │   │                                 SessionDots, Settings
-│   └── Resources/
-│       └── PressStart2P-Regular.ttf  The only bundled resource
+│   ├── Resources/
+│   │   └── PressStart2P-Regular.ttf  The pixel typeface
+│   └── Assets.xcassets/
+│       └── AppIcon.appiconset        1024 masters: light, dark, tinted
 └── LightMinuteWidget/
     ├── LightMinuteWidgetBundle.swift
     └── RestLiveActivityWidget.swift  Live Activity only — no home-screen widget
@@ -187,6 +209,7 @@ Honest list of what isn't finished.
 | **Weather** | Diurnal softens shadows under cloud. Not implemented — needs real weather data. |
 | **Location** | Longitude is approximated from the device's UTC offset and latitude is fixed at 20°, so shadow bearings are roughly right and precisely wrong. |
 | **Typography** | Press Start 2P instead of the system's Libre Baskerville / IBM Plex Mono — deliberate, see above. |
+| **Icon packaging** | The built `Info.plist` carries `CFBundleIconName` nested inside `CFBundlePrimaryIcon` but not at the top level, where App Store Connect validation wants it. Harmless here — a free team can't submit anyway — but it would need sorting before any upload. `INFOPLIST_KEY_CFBundleIconName` does not fix it; that prefix only works for keys on Xcode's allowlist. |
 
 ---
 

@@ -20,6 +20,7 @@
 		A109 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A009 /* SettingsView.swift */; };
 		A111 /* SessionDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A011 /* SessionDotsView.swift */; };
 		A112 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A012 /* PressStart2P-Regular.ttf */; };
+		A113 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A013 /* Assets.xcassets */; };
 		A117 /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
 		A118 /* RestLiveActivity.swift in Sources */       = {isa = PBXBuildFile; fileRef = A018 /* RestLiveActivity.swift */; };
 		W101 /* LightMinuteWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020 /* LightMinuteWidgetBundle.swift */; };
@@ -54,6 +55,7 @@
 		A009 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A011 /* SessionDotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDotsView.swift; sourceTree = "<group>"; };
 		A012 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
+		A013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A017 /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
 		A018 /* RestLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivity.swift; sourceTree = "<group>"; };
 		A020 /* LightMinuteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteWidgetBundle.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				ASVC /* Services */,
 				ADSN /* Design */,
 				ARES /* Resources */,
+				A013 /* Assets.xcassets */,
 			);
 			path = LightMinute;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A112 /* PressStart2P-Regular.ttf in Resources */,
+				A113 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
