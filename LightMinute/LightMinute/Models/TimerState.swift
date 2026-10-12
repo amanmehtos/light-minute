@@ -12,9 +12,6 @@ struct TimerSettings {
     // Target — focus sessions to finish today
     var dailyTarget: Int = 8
 
-    // Block — shield the chosen apps until the target is met
-    var blockApps: Bool = false
-
     // Focus Mode — on by default
     var flowModoro: Bool = true    // allow overflow / flow state
     var flowBreaks: Bool = true    // proportional rest (requires flowModoro)

@@ -36,7 +36,6 @@ class TimerViewModel: ObservableObject {
     private var ticker: Timer?
     private var actualFocusTime: TimeInterval = 0
     private let liveActivity = RestLiveActivity()
-    let blocker = AppBlocker()
     private let motion = CMMotionManager()
     private var lastFaceDown: Bool = false
     private static let restNotificationID = "lightminute.rest.end"
@@ -54,9 +53,6 @@ class TimerViewModel: ObservableObject {
 
     var targetReached: Bool { today.completed >= settings.dailyTarget }
 
-    /// Focus sessions still owed today.
-    var sessionsRemaining: Int { max(0, settings.dailyTarget - today.completed) }
-
     /// 0…1 — how far into today's target we are.
     var targetFraction: Double {
         guard settings.dailyTarget > 0 else { return 0 }
@@ -73,9 +69,7 @@ class TimerViewModel: ObservableObject {
         notifGen.prepare()
         liveActivity.clearStale()
         settings.dailyTarget = DailyProgress.loadTarget() ?? settings.dailyTarget
-        settings.blockApps   = AppBlocker.loadEnabled()
         today.refresh()
-        syncBlock()
         if settings.flipFocus { startFlipDetection() }
     }
 
@@ -87,17 +81,7 @@ class TimerViewModel: ObservableObject {
     func onForeground() {
         if status == .running { startTicker() }
         today.refresh()          // the app may have been away across midnight
-        syncBlock()              // …and a new day owes its sessions again
         refresh()
-    }
-
-    // MARK: – App blocking
-
-    /// The shield is up whenever the block is armed and today's target is still
-    /// outstanding. Finishing a single session does not lift it — only reaching
-    /// the target does, and midnight puts it back.
-    func syncBlock() {
-        blocker.apply(blocked: settings.blockApps && !targetReached)
     }
 
     func onBackground() {
@@ -185,7 +169,6 @@ class TimerViewModel: ObservableObject {
         let alreadyMet = targetReached
         today.increment()
         let justHitTarget = !alreadyMet && targetReached
-        syncBlock()                 // the session that meets the target lifts the shield
 
         let long = completedSessions % settings.sessions == 0
         mode = long ? .longRest : .shortRest
@@ -268,11 +251,6 @@ class TimerViewModel: ObservableObject {
         }
         if settings.dailyTarget != old.dailyTarget {
             DailyProgress.saveTarget(settings.dailyTarget)
-            syncBlock()         // raising the target can put the shield back up
-        }
-        if settings.blockApps != old.blockApps {
-            AppBlocker.saveEnabled(settings.blockApps)
-            syncBlock()
         }
     }
 

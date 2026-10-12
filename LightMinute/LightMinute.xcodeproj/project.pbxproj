@@ -22,7 +22,6 @@
 		A112 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A012 /* PressStart2P-Regular.ttf */; };
 		A117 /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
 		A118 /* RestLiveActivity.swift in Sources */       = {isa = PBXBuildFile; fileRef = A018 /* RestLiveActivity.swift */; };
-		A121 /* AppBlocker.swift in Sources */             = {isa = PBXBuildFile; fileRef = A025 /* AppBlocker.swift */; };
 		W101 /* LightMinuteWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020 /* LightMinuteWidgetBundle.swift */; };
 		W102 /* RestLiveActivityWidget.swift in Sources */  = {isa = PBXBuildFile; fileRef = A021 /* RestLiveActivityWidget.swift */; };
 		W103 /* RestActivityAttributes.swift in Sources */  = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
@@ -57,8 +56,6 @@
 		A012 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		A017 /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
 		A018 /* RestLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivity.swift; sourceTree = "<group>"; };
-		A025 /* AppBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBlocker.swift; sourceTree = "<group>"; };
-		A026 /* LightMinute.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightMinute.entitlements; sourceTree = "<group>"; };
 		A020 /* LightMinuteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteWidgetBundle.swift; sourceTree = "<group>"; };
 		A021 /* RestLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivityWidget.swift; sourceTree = "<group>"; };
 		A022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,7 +100,6 @@
 			children = (
 				A001 /* LightMinuteApp.swift */,
 				A002 /* ContentView.swift */,
-				A026 /* LightMinute.entitlements */,
 				AVMS /* ViewModels */,
 				AMDL /* Models */,
 				AVWS /* Views */,
@@ -163,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				A018 /* RestLiveActivity.swift */,
-				A025 /* AppBlocker.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -312,7 +307,6 @@
 				A111 /* SessionDotsView.swift in Sources */,
 				A117 /* RestActivityAttributes.swift in Sources */,
 				A118 /* RestLiveActivity.swift in Sources */,
-				A121 /* AppBlocker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,10 +30,6 @@ suspension, backgrounding and termination can't make the clock drift.
 
 **Stays awake.** The screen won't lock while a timer is running.
 
-**App blocking.** A Screen Time shield over apps you choose, held until the day's
-target is met. **Present in the code but not functional in this build** — see
-[Screen Time](#screen-time-blocking-not-currently-functional) below.
-
 ---
 
 ## Design
@@ -81,8 +77,7 @@ LightMinute/
 │   │   ├── TimerState.swift          Settings + DailyProgress (midnight rollover)
 │   │   └── RestActivityAttributes.swift
 │   ├── Services/
-│   │   ├── RestLiveActivity.swift    ActivityKit wrapper
-│   │   └── AppBlocker.swift          FamilyControls + ManagedSettings shield
+│   │   └── RestLiveActivity.swift    ActivityKit wrapper
 │   ├── ViewModels/
 │   │   └── TimerViewModel.swift      Wall-clock anchored timekeeping
 │   ├── Views/                        MikeHeader, PixelButton, PixelTimer,
@@ -124,79 +119,42 @@ Workable, with two frictions:
 
 ---
 
-## Screen Time blocking (not currently functional)
+## Screen Time blocking (removed)
 
-`Services/AppBlocker.swift` implements an app shield with FamilyControls and
-ManagedSettings: the user picks apps through Apple's `FamilyActivityPicker`, and a
-`ManagedSettingsStore` shield stays up until the day's target is met. The shield lives
-in the system rather than the process, so it survives the app being backgrounded,
-suspended or killed.
+Earlier versions shielded chosen apps with FamilyControls and ManagedSettings until
+the day's target was met. **That code has been removed.** It is preserved in git
+history at commit `199bf5d` (`LightMinute/Services/AppBlocker.swift`,
+`LightMinute.entitlements`, and the BLOCK section of `SettingsView`).
 
-**It does not work on a free Apple Developer Personal Team**, and the failure mode is
-confusing enough to be worth documenting.
-
-### The symptom
-
-The picker opens and lists categories — Social, Games, Entertainment — and expanding
-any of them shows **zero apps**. No error, no prompt, no explanation.
-
-That's what an unauthorized picker looks like. `FamilyActivityPicker` is a system view
-rendered out-of-process, so it presents for anyone who asks; but enumerating installed
-apps is privacy-sensitive and iOS will only do it for an app holding Screen Time
-authorization. **An empty accordion is the tell. A picker that opens is not evidence
-that Family Controls works.**
-
-### The cause
+It was cut because it could never run on this signing account, and a visible feature
+that silently does nothing is worse than no feature.
 
 Family Controls requires the `com.apple.developer.family-controls` entitlement, and a
-free Personal Team cannot enable that capability. Adding it to `CODE_SIGN_ENTITLEMENTS`
-doesn't fail at runtime — it fails the **build**, and takes the whole app down with it:
+**free Apple Developer Personal Team cannot enable that capability**. Adding it to
+`CODE_SIGN_ENTITLEMENTS` doesn't fail at runtime — it fails the build and takes the
+whole app down with it:
 
 ```
 error: Provisioning profile "iOS Team Provisioning Profile: com.lightminute.app"
        doesn't include the Family Controls (Development) capability.
 ```
 
-Note that the constraint is the *account tier*, not the fact that it's a development
-build. Development builds use Family Controls routinely; paid accounts get the
-development entitlement automatically through Xcode, with no review. Apple's approval
-is only needed to ship it to other people.
+The constraint is the *account tier*, not the fact that it's a development build.
+Development builds use Family Controls routinely; paid accounts get the development
+entitlement automatically through Xcode, with no review. Apple's approval is only
+needed to ship it to other people.
 
-`LightMinute.entitlements` is kept in the repo but deliberately **not** referenced by
-any build configuration.
+Worth knowing if it comes back: **an unauthorized `FamilyActivityPicker` does not
+show an error.** It is a system view rendered out-of-process, so it presents for
+anyone who asks and lists categories — Social, Games, Entertainment — but expanding
+any of them shows zero apps, because iOS won't enumerate installed apps for an app
+without Screen Time authorization. An empty accordion is the tell. A picker that
+opens is not evidence that Family Controls works.
 
-### Re-enabling it
-
-With a paid Apple Developer Program membership:
-
-1. Enable **Family Controls** on the App ID in the developer portal (or add the
-   capability in Xcode's Signing & Capabilities, which does it for you).
-2. Add this line back to both app build configurations in `project.pbxproj`:
-   ```
-   CODE_SIGN_ENTITLEMENTS = LightMinute/LightMinute.entitlements;
-   ```
-3. Rebuild. `AppBlocker` detects the entitlement at launch and the UI enables itself.
-
-### How to verify it on hardware
-
-The app reads its own `embedded.mobileprovision` at launch and writes the result to
-its Documents directory, which can be pulled off a development-signed device without
-any taps:
-
-```bash
-xcrun devicectl device copy from --device <device-uuid> \
-  --domain-type appDataContainer --domain-identifier com.lightminute.app \
-  --source Documents/screentime-diagnosis.txt --destination ./diag.txt
-```
-
-A build without the entitlement reports:
-
-```
-launch | status=notDetermined | entitlementInBinary=false
-```
-
-> This instrumentation (`Diagnostics` in `AppBlocker.swift`) is temporary and should
-> be removed once the entitlement question is settled for good.
+This was confirmed on hardware rather than inferred: a temporary diagnostic read the
+app's own `embedded.mobileprovision` at launch, and the file pulled back over the
+cable with `xcrun devicectl device copy from --domain-type appDataContainer` read
+`status=notDetermined | entitlementInBinary=false`.
 
 ---
 
@@ -206,10 +164,7 @@ Honest list of what isn't finished.
 
 | | |
 |---|---|
-| **App blocking** | Code complete, inert without the entitlement. The UI reports `NOT ENFORCED` rather than pretending. |
-| **Midnight re-arm** | The shield lifts when the target is met but won't re-arm at midnight on its own — that needs a `DeviceActivityMonitor` extension. |
-| **Shield screen** | Blocked apps show Apple's stock shield, not a Diurnal-styled one. Needs a `ShieldConfiguration` extension. |
-| **Toggle bypass** | BLOCK APPS is a one-tap escape hatch. A real commitment device would resist being switched off. |
+| **App blocking** | Removed, not finished — see above. Bringing it back needs a paid membership, plus a `DeviceActivityMonitor` extension to re-arm the shield at midnight and a `ShieldConfiguration` extension so blocked apps show a Diurnal-styled screen rather than Apple's stock one. |
 | **Weather** | Diurnal softens shadows under cloud. Not implemented — needs real weather data. |
 | **Location** | Longitude is approximated from the device's UTC offset and latitude is fixed at 20°, so shadow bearings are roughly right and precisely wrong. |
 | **Typography** | Press Start 2P instead of the system's Libre Baskerville / IBM Plex Mono — deliberate, see above. |
