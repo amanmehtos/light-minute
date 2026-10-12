@@ -24,3 +24,6 @@ diag.txt
 
 # Claude Code local settings (machine-specific permissions)
 .claude/settings.local.json
+
+# Figma design exports (43MB of PNGs) — kept on disk, out of git
+Figma/
