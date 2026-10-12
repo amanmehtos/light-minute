@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Xcode — per-user state, never shared
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Build products
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# Diagnostics pulled off the device
+diag.txt
+*.diagnosis.txt
+
+# Claude Code local settings (machine-specific permissions)
+.claude/settings.local.json

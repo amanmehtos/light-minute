@@ -1,0 +1,516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A101 /* LightMinuteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001 /* LightMinuteApp.swift */; };
+		A102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002 /* ContentView.swift */; };
+		A103 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003 /* TimerViewModel.swift */; };
+		A104 /* TimerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A004 /* TimerState.swift */; };
+		A105 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005 /* Theme.swift */; };
+		A119 /* DiurnalLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A023 /* DiurnalLight.swift */; };
+		A120 /* DiurnalElevation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024 /* DiurnalElevation.swift */; };
+		A106 /* PixelTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A006 /* PixelTimerView.swift */; };
+		A107 /* MikeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007 /* MikeHeaderView.swift */; };
+		A108 /* PixelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008 /* PixelButtonView.swift */; };
+		A109 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A009 /* SettingsView.swift */; };
+		A111 /* SessionDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A011 /* SessionDotsView.swift */; };
+		A112 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A012 /* PressStart2P-Regular.ttf */; };
+		A117 /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
+		A118 /* RestLiveActivity.swift in Sources */       = {isa = PBXBuildFile; fileRef = A018 /* RestLiveActivity.swift */; };
+		A121 /* AppBlocker.swift in Sources */             = {isa = PBXBuildFile; fileRef = A025 /* AppBlocker.swift */; };
+		W101 /* LightMinuteWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020 /* LightMinuteWidgetBundle.swift */; };
+		W102 /* RestLiveActivityWidget.swift in Sources */  = {isa = PBXBuildFile; fileRef = A021 /* RestLiveActivityWidget.swift */; };
+		W103 /* RestActivityAttributes.swift in Sources */  = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
+		W104 /* Theme.swift in Sources */                   = {isa = PBXBuildFile; fileRef = A005 /* Theme.swift */; };
+		W105 /* PressStart2P-Regular.ttf in Resources */    = {isa = PBXBuildFile; fileRef = A012 /* PressStart2P-Regular.ttf */; };
+		W201 /* LightMinuteWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = WPRD /* LightMinuteWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		WPRX /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = APJT /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = WTGT;
+			remoteInfo = LightMinuteWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A001 /* LightMinuteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteApp.swift; sourceTree = "<group>"; };
+		A002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A003 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
+		A004 /* TimerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerState.swift; sourceTree = "<group>"; };
+		A005 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A023 /* DiurnalLight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiurnalLight.swift; sourceTree = "<group>"; };
+		A024 /* DiurnalElevation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiurnalElevation.swift; sourceTree = "<group>"; };
+		A006 /* PixelTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelTimerView.swift; sourceTree = "<group>"; };
+		A007 /* MikeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MikeHeaderView.swift; sourceTree = "<group>"; };
+		A008 /* PixelButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixelButtonView.swift; sourceTree = "<group>"; };
+		A009 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A011 /* SessionDotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDotsView.swift; sourceTree = "<group>"; };
+		A012 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
+		A017 /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
+		A018 /* RestLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivity.swift; sourceTree = "<group>"; };
+		A025 /* AppBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBlocker.swift; sourceTree = "<group>"; };
+		A026 /* LightMinute.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LightMinute.entitlements; sourceTree = "<group>"; };
+		A020 /* LightMinuteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteWidgetBundle.swift; sourceTree = "<group>"; };
+		A021 /* RestLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivityWidget.swift; sourceTree = "<group>"; };
+		A022 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		APROJ /* LightMinute.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LightMinute.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		WPRD /* LightMinuteWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LightMinuteWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AFBP /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WFBP /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AEMB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				W201 /* LightMinuteWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXGroup section */
+		AAPP /* LightMinute */ = {
+			isa = PBXGroup;
+			children = (
+				A001 /* LightMinuteApp.swift */,
+				A002 /* ContentView.swift */,
+				A026 /* LightMinute.entitlements */,
+				AVMS /* ViewModels */,
+				AMDL /* Models */,
+				AVWS /* Views */,
+				ASVC /* Services */,
+				ADSN /* Design */,
+				ARES /* Resources */,
+			);
+			path = LightMinute;
+			sourceTree = "<group>";
+		};
+		ADSN /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A005 /* Theme.swift */,
+				A023 /* DiurnalLight.swift */,
+				A024 /* DiurnalElevation.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		AGRP = {
+			isa = PBXGroup;
+			children = (
+				AAPP /* LightMinute */,
+				AWGT /* LightMinuteWidget */,
+				APRD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AMDL /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A004 /* TimerState.swift */,
+				A017 /* RestActivityAttributes.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		APRD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				APROJ /* LightMinute.app */,
+				WPRD /* LightMinuteWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ARES /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A012 /* PressStart2P-Regular.ttf */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ASVC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A018 /* RestLiveActivity.swift */,
+				A025 /* AppBlocker.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		AVMS /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A003 /* TimerViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		AVWS /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A006 /* PixelTimerView.swift */,
+				A007 /* MikeHeaderView.swift */,
+				A008 /* PixelButtonView.swift */,
+				A009 /* SettingsView.swift */,
+				A011 /* SessionDotsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AWGT /* LightMinuteWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A020 /* LightMinuteWidgetBundle.swift */,
+				A021 /* RestLiveActivityWidget.swift */,
+				A022 /* Info.plist */,
+			);
+			path = LightMinuteWidget;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		ATGT /* LightMinute */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ABCL /* Build configuration list for PBXNativeTarget "LightMinute" */;
+			buildPhases = (
+				ASBP /* Sources */,
+				AFBP /* Frameworks */,
+				ARBP /* Resources */,
+				AEMB /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				WDEP /* PBXTargetDependency */,
+			);
+			name = LightMinute;
+			productName = LightMinute;
+			productReference = APROJ /* LightMinute.app */;
+			productType = "com.apple.product-type.application";
+		};
+		WTGT /* LightMinuteWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = WBCL /* Build configuration list for PBXNativeTarget "LightMinuteWidget" */;
+			buildPhases = (
+				WSBP /* Sources */,
+				WFBP /* Frameworks */,
+				WRBP /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LightMinuteWidget;
+			productName = LightMinuteWidget;
+			productReference = WPRD /* LightMinuteWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		APJT /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					ATGT = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					WTGT = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = APCL /* Build configuration list for PBXProject "LightMinute" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AGRP;
+			productRefGroup = APRD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ATGT /* LightMinute */,
+				WTGT /* LightMinuteWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ARBP /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A112 /* PressStart2P-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WRBP /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W105 /* PressStart2P-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		ASBP /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A101 /* LightMinuteApp.swift in Sources */,
+				A102 /* ContentView.swift in Sources */,
+				A103 /* TimerViewModel.swift in Sources */,
+				A104 /* TimerState.swift in Sources */,
+				A105 /* Theme.swift in Sources */,
+				A119 /* DiurnalLight.swift in Sources */,
+				A120 /* DiurnalElevation.swift in Sources */,
+				A106 /* PixelTimerView.swift in Sources */,
+				A107 /* MikeHeaderView.swift in Sources */,
+				A108 /* PixelButtonView.swift in Sources */,
+				A109 /* SettingsView.swift in Sources */,
+				A111 /* SessionDotsView.swift in Sources */,
+				A117 /* RestActivityAttributes.swift in Sources */,
+				A118 /* RestLiveActivity.swift in Sources */,
+				A121 /* AppBlocker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		WSBP /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W101 /* LightMinuteWidgetBundle.swift in Sources */,
+				W102 /* RestLiveActivityWidget.swift in Sources */,
+				W103 /* RestActivityAttributes.swift in Sources */,
+				W104 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		WDEP /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = WTGT /* LightMinuteWidget */;
+			targetProxy = WPRX /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		ABCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		ABCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		ABCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T669UF4G54;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightminute.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		ABCG /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T669UF4G54;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightminute.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		WBCF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T669UF4G54;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LightMinuteWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightminute.app.LightMinuteWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		WBCG /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T669UF4G54;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LightMinuteWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lightminute.app.LightMinuteWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ABCL /* Build configuration list for PBXNativeTarget "LightMinute" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABCF /* Debug */,
+				ABCG /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		WBCL /* Build configuration list for PBXNativeTarget "LightMinuteWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				WBCF /* Debug */,
+				WBCG /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		APCL /* Build configuration list for PBXProject "LightMinute" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABCD /* Debug */,
+				ABCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = APJT /* Project object */;
+}

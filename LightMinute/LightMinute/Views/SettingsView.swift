@@ -1,0 +1,418 @@
+import SwiftUI
+
+struct SettingsView: View {
+    @ObservedObject var vm: TimerViewModel
+
+    var body: some View {
+        ZStack {
+            Theme.Color.background.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                MikeHeaderView(message: vm.mikeMessage)
+                    .padding(.bottom, 16)
+
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 20) {
+
+                        // Title
+                        Text("SETTINGS")
+                            .font(.custom(Theme.pixelFont, size: 16))
+                            .foregroundColor(Theme.Color.timerText)
+                            .padding(.bottom, 4)
+
+                        // ── Timer Durations ──────────────────────────────
+                        sectionLabel("TIMER")
+
+                        ArrowRow(label: "FOCUS",
+                                 value: Int(vm.settings.focusDuration / 60), unit: "MIN",
+                                 onMinus: { if vm.settings.focusDuration > 60  { vm.settings.focusDuration -= 60 }
+                                           vm.reset() },
+                                 onPlus:  { if vm.settings.focusDuration < 3600 { vm.settings.focusDuration += 60 }
+                                           vm.reset() })
+
+                        ArrowRow(label: "SHORT BREAK",
+                                 value: Int(vm.settings.shortRestDuration / 60), unit: "MIN",
+                                 onMinus: { if vm.settings.shortRestDuration > 60   { vm.settings.shortRestDuration -= 60 } },
+                                 onPlus:  { if vm.settings.shortRestDuration < 1800 { vm.settings.shortRestDuration += 60 } })
+
+                        ArrowRow(label: "LONG BREAK",
+                                 value: Int(vm.settings.longRestDuration / 60), unit: "MIN",
+                                 onMinus: { if vm.settings.longRestDuration > 60   { vm.settings.longRestDuration -= 60 } },
+                                 onPlus:  { if vm.settings.longRestDuration < 3600 { vm.settings.longRestDuration += 60 } })
+
+                        ArrowRow(label: "SESSIONS",
+                                 value: vm.settings.sessions, unit: "",
+                                 onMinus: { if vm.settings.sessions > 1  { vm.settings.sessions -= 1 } },
+                                 onPlus:  { if vm.settings.sessions < 10 { vm.settings.sessions += 1 } })
+
+                        divider
+
+                        // ── Focus Mode ───────────────────────────────────
+                        sectionLabel("FOCUS MODE")
+
+                        PixelCheckbox(
+                            label: "FLOWMODORO",
+                            detail: "Keep focus running past target",
+                            isOn: $vm.settings.flowModoro
+                        )
+
+                        PixelCheckbox(
+                            label: "FLOW BREAKS",
+                            detail: "Proportional rest from overflow time",
+                            isOn: $vm.settings.flowBreaks,
+                            disabled: !vm.settings.flowModoro
+                        )
+
+                        divider
+
+                        // ── Target ───────────────────────────────────────
+                        sectionLabel("TARGET")
+
+                        ArrowRow(label: "DAILY TARGET",
+                                 value: vm.settings.dailyTarget, unit: "SESSIONS",
+                                 onMinus: { if vm.settings.dailyTarget > 1  { vm.settings.dailyTarget -= 1 } },
+                                 onPlus:  { if vm.settings.dailyTarget < 24 { vm.settings.dailyTarget += 1 } })
+
+                        DailyTargetProgress(done: vm.today.completed,
+                                            target: vm.settings.dailyTarget,
+                                            fraction: vm.targetFraction,
+                                            reached: vm.targetReached)
+
+                        divider
+
+                        // ── Block ────────────────────────────────────────
+                        sectionLabel("BLOCK")
+
+                        BlockSection(blocker: vm.blocker,
+                                     enabled: $vm.settings.blockApps,
+                                     remaining: vm.sessionsRemaining,
+                                     onChange: vm.syncBlock)
+
+                        divider
+
+                        // ── Interface ────────────────────────────────────
+                        sectionLabel("INTERFACE")
+
+                        PixelCheckbox(
+                            label: "DARK MODE",
+                            detail: "Lit by the full moon instead of the sun",
+                            isOn: $vm.settings.darkMode
+                        )
+
+                        PixelCheckbox(
+                            label: "FLIP FOCUS",
+                            detail: "Face-down starts · face-up pauses",
+                            isOn: $vm.settings.flipFocus
+                        )
+
+                        // Exit
+                        HStack {
+                            Spacer()
+                            PixelButton("Exit", icon: "xmark") {
+                            vm.closeSettings()
+                        }
+                            Spacer()
+                        }
+                        .padding(.top, 16)
+                        .padding(.bottom, 40)
+                    }
+                    .padding(.horizontal, 20)
+                }
+            }
+        }
+        .preferredColorScheme(vm.colorScheme)
+    }
+
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.custom(Theme.pixelFont, size: 8))
+            .foregroundColor(Theme.Color.timerText.opacity(0.5))
+    }
+
+    private var divider: some View {
+        Rectangle()
+            .fill(Theme.Color.border)
+            .frame(height: 1)
+            .padding(.vertical, 4)
+    }
+}
+
+// MARK: – Arrow row (duration picker)
+
+struct ArrowRow: View {
+    let label: String
+    let value: Int
+    let unit: String
+    let onMinus: () -> Void
+    let onPlus:  () -> Void
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.custom(Theme.pixelFont, size: 8))
+                .foregroundColor(Theme.Color.timerText)
+            Spacer()
+            Button(action: onMinus) {
+                Image(systemName: "arrowtriangle.left.fill")
+                    .font(.system(size: 11))
+                    .foregroundColor(Theme.Color.timerText)
+            }.buttonStyle(.plain)
+
+            Text(unit.isEmpty ? "\(value)" : "\(value) \(unit)")
+                .font(.custom(Theme.pixelFont, size: 8))
+                .foregroundColor(Theme.Color.timerText)
+                .frame(minWidth: 64, alignment: .center)
+
+            Button(action: onPlus) {
+                Image(systemName: "arrowtriangle.right.fill")
+                    .font(.system(size: 11))
+                    .foregroundColor(Theme.Color.timerText)
+            }.buttonStyle(.plain)
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+// MARK: – Today's progress against the daily target
+
+/// How far into today's target the user is. Monochrome: the track is sunken
+/// into the page and the done portion is solid ink lying in it.
+struct DailyTargetProgress: View {
+    let done: Int
+    let target: Int
+    let fraction: Double
+    let reached: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text(reached ? "TARGET MET" : "TODAY")
+                    .font(.custom(Theme.pixelFont, size: 7))
+                    .foregroundColor(Theme.Color.timerText.opacity(reached ? 0.85 : 0.45))
+                Spacer()
+                Text("\(done) / \(target)")
+                    .font(.custom(Theme.pixelFont, size: 7))
+                    .foregroundColor(Theme.Color.timerText.opacity(0.85))
+            }
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Theme.Color.sunken)
+                    Capsule()
+                        .fill(Theme.Color.dotFilled)
+                        .frame(width: max(0, geo.size.width * fraction))
+                }
+            }
+            .frame(height: 6)
+            .clipShape(Capsule())
+            .overlay(Capsule().strokeBorder(Theme.Color.border, lineWidth: 1))
+
+            Text("Counts finished focus sessions · resets at midnight")
+                .font(.custom(Theme.pixelFont, size: 7))
+                .foregroundColor(Theme.Color.timerText.opacity(0.3))
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 2)
+    }
+}
+
+// MARK: – Screen Time block
+
+/// Arms the shield and picks what it covers. The picker is Apple's own — the
+/// chosen apps never leave the system, so there is nothing of the user's to
+/// show here beyond a count.
+struct BlockSection: View {
+    @ObservedObject var blocker: AppBlocker
+    @Binding var enabled: Bool
+    let remaining: Int
+    let onChange: () -> Void
+
+    @State private var showPicker = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            PixelCheckbox(
+                label: "BLOCK APPS",
+                detail: "Shield the chosen apps until today's target is met",
+                isOn: $enabled
+            )
+
+            // Asking for Screen Time used to be a side-effect of flipping the
+            // toggle, which meant a toggle already on from a previous launch
+            // never asked at all. Make it a thing you can see and press.
+            if enabled && blocker.access != .granted {
+                Button {
+                    Task { await blocker.requestAccess(); onChange() }
+                } label: {
+                    HStack {
+                        Text("ALLOW SCREEN TIME")
+                            .font(.custom(Theme.pixelFont, size: 8))
+                            .foregroundColor(Theme.Color.timerText)
+                        Spacer()
+                        Text(accessLabel)
+                            .font(.custom(Theme.pixelFont, size: 8))
+                            .foregroundColor(Theme.Color.timerText.opacity(0.85))
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(Theme.Color.timerText.opacity(0.6))
+                    }
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+            }
+
+            Button { showPicker = true } label: {
+                HStack {
+                    Text("CHOOSE APPS")
+                        .font(.custom(Theme.pixelFont, size: 8))
+                        .foregroundColor(Theme.Color.timerText.opacity(canPick ? 1 : 0.35))
+                    Spacer()
+                    // A bare count reads as success, so it must not stand alone
+                    // when nothing can actually be enforced — otherwise picking
+                    // five apps looks identical to blocking five apps.
+                    Text(pickedLabel)
+                        .font(.custom(Theme.pixelFont, size: 8))
+                        .foregroundColor(Theme.Color.timerText.opacity(canPick ? 0.85 : 0.3))
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundColor(Theme.Color.timerText.opacity(canPick ? 0.6 : 0.25))
+                }
+                .padding(.vertical, 8)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            // Unauthorized, iOS renders the picker's categories but lists no
+            // apps inside them. It stays reachable anyway: whole categories can
+            // still be ticked, and the selection persists, so a setup done now
+            // survives to the day the entitlement exists. The row says plainly
+            // that nothing is being enforced, which is the honest part.
+            .disabled(!enabled)
+
+            // Monochrome, so a warning cannot shout in red — it shouts in
+            // contrast. An ordinary hint sits at 0.3; something that stops the
+            // feature working comes forward to near full ink.
+            Text(statusLine)
+                .font(.custom(Theme.pixelFont, size: 7))
+                .foregroundColor(Theme.Color.timerText.opacity(isBlocked ? 0.8 : 0.3))
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.top, 2)
+        }
+        .familyActivityPicker(isPresented: $showPicker, selection: $blocker.selection)
+        // The toggle may already be on from a previous launch, in which case no
+        // request is ever made and the state stays `.notDetermined` — which would
+        // dim the picker for a reason that was never actually tested.
+        .task {
+            if enabled, blocker.access == .notDetermined { await blocker.requestAccess() }
+        }
+        // Re-apply once the picker is put away rather than on every tap inside it.
+        .onChange(of: showPicker) { _, shown in if !shown { onChange() } }
+        .onChange(of: enabled) { _, on in
+            Task {
+                if on, blocker.access != .granted { await blocker.requestAccess() }
+                onChange()
+            }
+        }
+    }
+
+    /// Something is stopping the shield from ever going up — as opposed to the
+    /// shield simply being down right now, which is normal.
+    private var isBlocked: Bool {
+        enabled && (blocker.access == .unavailable || blocker.access == .denied)
+    }
+
+    /// Reachable whenever the block is armed. Whether iOS will actually fill it
+    /// is a separate question, answered by `isBlocked` and the status line.
+    private var canPick: Bool { enabled }
+
+    private var accessLabel: String {
+        switch blocker.access {
+        case .granted:       return "ALLOWED"
+        case .denied:        return "REFUSED"
+        case .unavailable:   return "UNAVAILABLE"
+        case .notDetermined: return "TAP TO ASK"
+        }
+    }
+
+    private var pickedLabel: String {
+        if blocker.isEmpty { return "NONE" }
+        return isBlocked ? "\(blocker.count) · NOT ENFORCED" : "\(blocker.count) PICKED"
+    }
+
+    private var statusLine: String {
+        if enabled && blocker.access == .unavailable {
+            return "Screen Time blocking needs a paid Apple Developer account · unavailable in this build"
+        }
+        if enabled && blocker.access == .denied {
+            return "Screen Time access was refused · allow it in Settings › Screen Time"
+        }
+        if enabled && blocker.isEmpty {
+            return "Pick something to block"
+        }
+        if blocker.isShielding {
+            return remaining == 1
+                ? "Blocked · 1 session left today"
+                : "Blocked · \(remaining) sessions left today"
+        }
+        return "Lifts the moment the target is met · returns at midnight"
+    }
+}
+
+// MARK: – Pixel checkbox with description
+
+struct PixelCheckbox: View {
+    let label: String
+    let detail: String
+    @Binding var isOn: Bool
+    var disabled: Bool = false
+
+    var body: some View {
+        Button { if !disabled { isOn.toggle() } } label: {
+            HStack(alignment: .top, spacing: 12) {
+                // Box — a small raised chip, so it catches the light like everything else
+                ZStack {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(Theme.Color.checkboxBg)
+                        .frame(width: 18, height: 18)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                                .strokeBorder(
+                                    disabled
+                                        ? Theme.Color.checkboxBorder.opacity(0.3)
+                                        : Theme.Color.checkboxBorder,
+                                    lineWidth: 1.5
+                                )
+                        )
+                    if isOn && !disabled {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(Theme.Color.timerText)
+                    }
+                }
+                .diurnalElevation(disabled ? Theme.Elevation.flat : Theme.Elevation.input,
+                                  cornerRadius: 3)
+                .padding(.top, 1)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(label)
+                        .font(.custom(Theme.pixelFont, size: 8))
+                        .foregroundColor(disabled
+                            ? Theme.Color.timerText.opacity(0.3)
+                            : Theme.Color.timerText)
+                    Text(detail)
+                        .font(.custom(Theme.pixelFont, size: 7))
+                        .foregroundColor(Theme.Color.timerText.opacity(disabled ? 0.2 : 0.45))
+                        .lineSpacing(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer()
+            }
+            .padding(.vertical, 6)
+            .opacity(disabled ? 0.5 : 1.0)
+        }
+        .buttonStyle(.plain)
+    }
+}
