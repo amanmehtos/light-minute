@@ -8,6 +8,25 @@ read from across the room.
 
 ---
 
+## Screenshots
+
+| Focus | Flow state | Rest | Settings |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/screenshots/focus.png" width="200"> | <img src="docs/screenshots/flow.png" width="200"> | <img src="docs/screenshots/rest.png" width="200"> | <img src="docs/screenshots/settings.png" width="200"> |
+
+Note the second frame: once you run past the target the digits go **hollow** and start
+counting up instead of down. Same timer, inverted — you're no longer spending a budget,
+you're building one.
+
+Dark mode is the default. The two modes aren't a palette swap, they're the same surface
+under a different light — the sun in one, the full moon in the other:
+
+| Dark — moonlit | Light — sunlit |
+|:---:|:---:|
+| <img src="docs/screenshots/idle.png" width="240"> | <img src="docs/screenshots/light.png" width="240"> |
+
+---
+
 ## What it does
 
 **Flowmodoro.** The focus timer doesn't stop at 25 minutes. If you're in it, keep
