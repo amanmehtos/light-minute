@@ -95,6 +95,15 @@ the system would otherwise composite its own gradient behind the dark and tinted
 versions, and a gradient is the one thing a surface lit by a single light cannot
 have.
 
+The Dynamic Island shows the same mark rather than a separate glyph. It used to
+show a moon, which was doing real work — the Live Activity only runs during a
+break — but that slot is where the system says *which app is talking*, so it has
+to match the icon; the break is still named in the expanded view. The mark is
+drawn in SwiftUI from one shared cell table rather than imported as an image, so
+the icon and the island can't drift apart, and the island's run is shortened to
+three marks (two in the minimal presentation) because the full five turn to noise
+below about 24pt.
+
 > **Known deviation:** Diurnal UI specifies Libre Baskerville and IBM Plex Mono.
 > This app deliberately uses Press Start 2P instead, to match the original Figma
 > design. The light model and monochrome rules are followed; the typography is not.
@@ -111,6 +120,7 @@ LightMinute/
 │   ├── Design/
 │   │   ├── DiurnalLight.swift        Solar position → shadow geometry
 │   │   ├── DiurnalElevation.swift    Shadow ViewModifier, generic over InsettableShape
+│   │   ├── LightMinuteMark.swift     The app mark, drawn — shared with the widget
 │   │   └── Theme.swift               Adaptive colours via UIColor(dynamicProvider:)
 │   ├── Models/
 │   │   ├── TimerState.swift          Settings + DailyProgress (midnight rollover)

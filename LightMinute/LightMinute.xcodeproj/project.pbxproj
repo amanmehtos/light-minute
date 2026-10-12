@@ -14,6 +14,8 @@
 		A105 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A005 /* Theme.swift */; };
 		A119 /* DiurnalLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A023 /* DiurnalLight.swift */; };
 		A120 /* DiurnalElevation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024 /* DiurnalElevation.swift */; };
+		A121 /* LightMinuteMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A025 /* LightMinuteMark.swift */; };
+		W106 /* LightMinuteMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A025 /* LightMinuteMark.swift */; };
 		A106 /* PixelTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A006 /* PixelTimerView.swift */; };
 		A107 /* MikeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A007 /* MikeHeaderView.swift */; };
 		A108 /* PixelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A008 /* PixelButtonView.swift */; };
@@ -56,6 +58,7 @@
 		A011 /* SessionDotsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDotsView.swift; sourceTree = "<group>"; };
 		A012 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		A013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A025 /* LightMinuteMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteMark.swift; sourceTree = "<group>"; };
 		A017 /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
 		A018 /* RestLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivity.swift; sourceTree = "<group>"; };
 		A020 /* LightMinuteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteWidgetBundle.swift; sourceTree = "<group>"; };
@@ -119,6 +122,7 @@
 				A005 /* Theme.swift */,
 				A023 /* DiurnalLight.swift */,
 				A024 /* DiurnalElevation.swift */,
+				A025 /* LightMinuteMark.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -304,6 +308,7 @@
 				A105 /* Theme.swift in Sources */,
 				A119 /* DiurnalLight.swift in Sources */,
 				A120 /* DiurnalElevation.swift in Sources */,
+				A121 /* LightMinuteMark.swift in Sources */,
 				A106 /* PixelTimerView.swift in Sources */,
 				A107 /* MikeHeaderView.swift in Sources */,
 				A108 /* PixelButtonView.swift in Sources */,
@@ -322,6 +327,7 @@
 				W102 /* RestLiveActivityWidget.swift in Sources */,
 				W103 /* RestActivityAttributes.swift in Sources */,
 				W104 /* Theme.swift in Sources */,
+				W106 /* LightMinuteMark.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

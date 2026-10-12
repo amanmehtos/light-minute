@@ -55,8 +55,12 @@ struct RestLiveActivityWidget: Widget {
                 }
 
             } compactLeading: {
-                Image(systemName: "moon.fill")
+                // The app mark, not a rest glyph. This slot is where the system
+                // says which app is talking, so it has to match the icon; the
+                // fact that it's a break is carried by the expanded view's text.
+                LightMinuteMark(trail: 3)
                     .foregroundColor(Theme.Color.timerText)
+                    .padding(.vertical, 3)
 
             } compactTrailing: {
                 Text(timerInterval: context.state.range, countsDown: true)
@@ -65,8 +69,11 @@ struct RestLiveActivityWidget: Widget {
                     .frame(width: 44)
 
             } minimal: {
-                Image(systemName: "moon.fill")
+                // Smallest presentation there is — the run drops to two marks
+                // and a head, which reads as the same mark zoomed in.
+                LightMinuteMark(trail: 2)
                     .foregroundColor(Theme.Color.timerText)
+                    .padding(2)
             }
             .keylineTint(Theme.Color.timerText)
         }
