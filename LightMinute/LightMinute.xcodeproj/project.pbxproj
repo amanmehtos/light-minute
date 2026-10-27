@@ -23,6 +23,10 @@
 		A111 /* SessionDotsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A011 /* SessionDotsView.swift */; };
 		A112 /* PressStart2P-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A012 /* PressStart2P-Regular.ttf */; };
 		A113 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A013 /* Assets.xcassets */; };
+		A122 /* BoundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026 /* BoundTask.swift */; };
+		A123 /* LightWeekAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = A027 /* LightWeekAuth.swift */; };
+		A124 /* LightWeekClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A028 /* LightWeekClient.swift */; };
+		A125 /* FocusOutbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A029 /* FocusOutbox.swift */; };
 		A117 /* RestActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A017 /* RestActivityAttributes.swift */; };
 		A118 /* RestLiveActivity.swift in Sources */       = {isa = PBXBuildFile; fileRef = A018 /* RestLiveActivity.swift */; };
 		W101 /* LightMinuteWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A020 /* LightMinuteWidgetBundle.swift */; };
@@ -59,6 +63,11 @@
 		A012 /* PressStart2P-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PressStart2P-Regular.ttf"; sourceTree = "<group>"; };
 		A013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A025 /* LightMinuteMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteMark.swift; sourceTree = "<group>"; };
+		A026 /* BoundTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundTask.swift; sourceTree = "<group>"; };
+		A027 /* LightWeekAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightWeekAuth.swift; sourceTree = "<group>"; };
+		A028 /* LightWeekClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightWeekClient.swift; sourceTree = "<group>"; };
+		A029 /* FocusOutbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusOutbox.swift; sourceTree = "<group>"; };
+		A030 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A017 /* RestActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestActivityAttributes.swift; sourceTree = "<group>"; };
 		A018 /* RestLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestLiveActivity.swift; sourceTree = "<group>"; };
 		A020 /* LightMinuteWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightMinuteWidgetBundle.swift; sourceTree = "<group>"; };
@@ -112,6 +121,7 @@
 				ADSN /* Design */,
 				ARES /* Resources */,
 				A013 /* Assets.xcassets */,
+				A030 /* Info.plist */,
 			);
 			path = LightMinute;
 			sourceTree = "<group>";
@@ -141,6 +151,7 @@
 			children = (
 				A004 /* TimerState.swift */,
 				A017 /* RestActivityAttributes.swift */,
+				A026 /* BoundTask.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -166,6 +177,9 @@
 			isa = PBXGroup;
 			children = (
 				A018 /* RestLiveActivity.swift */,
+				A027 /* LightWeekAuth.swift */,
+				A028 /* LightWeekClient.swift */,
+				A029 /* FocusOutbox.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -218,6 +232,9 @@
 				WDEP /* PBXTargetDependency */,
 			);
 			name = LightMinute;
+			packageProductDependencies = (
+				APKP /* LightKit */,
+			);
 			productName = LightMinute;
 			productReference = APROJ /* LightMinute.app */;
 			productType = "com.apple.product-type.application";
@@ -266,6 +283,9 @@
 				Base,
 			);
 			mainGroup = AGRP;
+			packageReferences = (
+				APKR /* XCLocalSwiftPackageReference "LightKit" */,
+			);
 			productRefGroup = APRD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -316,6 +336,10 @@
 				A111 /* SessionDotsView.swift in Sources */,
 				A117 /* RestActivityAttributes.swift in Sources */,
 				A118 /* RestLiveActivity.swift in Sources */,
+				A122 /* BoundTask.swift in Sources */,
+				A123 /* LightWeekAuth.swift in Sources */,
+				A124 /* LightWeekClient.swift in Sources */,
+				A125 /* FocusOutbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +364,20 @@
 			targetProxy = WPRX /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		APKR /* XCLocalSwiftPackageReference "LightKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../light-work/apps/ios/LightKit";
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		APKP /* LightKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LightKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		ABCD /* Debug */ = {
@@ -389,6 +427,7 @@
 				DEVELOPMENT_TEAM = T669UF4G54;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LightMinute/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -417,6 +456,7 @@
 				DEVELOPMENT_TEAM = T669UF4G54;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LightMinute/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

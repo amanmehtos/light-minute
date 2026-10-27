@@ -95,6 +95,13 @@ struct SettingsView: View {
                             isOn: $vm.settings.flipFocus
                         )
 
+                        divider
+
+                        // ── Light Week ───────────────────────────────────
+                        sectionLabel("LIGHT WEEK")
+
+                        LightWeekSection(vm: vm)
+
                         // Exit
                         HStack {
                             Spacer()
@@ -124,6 +131,109 @@ struct SettingsView: View {
             .fill(Theme.Color.border)
             .frame(height: 1)
             .padding(.vertical, 4)
+    }
+}
+
+// MARK: – Light Week
+
+/// Connecting an account, and seeing which one.
+///
+/// Everything here is optional and says so: Light Minute is a whole timer
+/// without an account, and this section is the only place that admits one
+/// exists. It sits at the bottom for that reason.
+struct LightWeekSection: View {
+    @ObservedObject var vm: TimerViewModel
+    @ObservedObject private var auth: LightWeekAuth
+    @ObservedObject private var outbox: FocusOutbox
+
+    init(vm: TimerViewModel) {
+        self.vm = vm
+        // The timer owns these; the section only watches them, and has to watch
+        // them directly because a change inside a nested object does not reach
+        // a view observing only the object that holds it.
+        _auth = ObservedObject(wrappedValue: vm.auth)
+        _outbox = ObservedObject(wrappedValue: vm.outbox)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            switch auth.state {
+            case .signedOut:
+                detail("Log finished sessions against a Light Week task. The timer works the same either way.")
+                HStack {
+                    PixelButton("Connect", icon: "link") {
+                        Task { await auth.signIn() }
+                    }
+                    Spacer()
+                }
+
+            case .signingIn:
+                detail("Waiting for Light Week…")
+
+            case .signedIn(let email):
+                row("ACCOUNT", email ?? "CONNECTED")
+                if !outbox.pending.isEmpty {
+                    // Worth saying out loud: a session that has not reached the
+                    // account yet is not a session that was lost.
+                    detail("\(outbox.pending.count) session\(outbox.pending.count == 1 ? "" : "s") waiting to send.")
+                }
+                chip("DISCONNECT") { vm.disconnectLightWeek() }
+            }
+
+            if let task = vm.boundTask {
+                Rectangle()
+                    .fill(Theme.Color.border)
+                    .frame(height: 1)
+                    .padding(.vertical, 2)
+                row("COUNTING", task.title.uppercased())
+                chip("STOP COUNTING") { vm.unbind() }
+            }
+
+            if let error = auth.lastError ?? outbox.lastError {
+                detail(error)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    private func row(_ label: String, _ value: String) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(label)
+                .font(.custom(Theme.pixelFont, size: 7))
+                .foregroundColor(Theme.Color.timerText.opacity(0.45))
+            Spacer()
+            Text(value)
+                .font(.custom(Theme.pixelFont, size: 7))
+                .foregroundColor(Theme.Color.timerText.opacity(0.85))
+                .lineLimit(1)
+                .truncationMode(.middle)
+        }
+    }
+
+    private func detail(_ text: String) -> some View {
+        Text(text)
+            .font(.custom(Theme.pixelFont, size: 7))
+            .foregroundColor(Theme.Color.timerText.opacity(0.4))
+            .lineSpacing(3)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    /// A small raised chip, so a secondary action still catches the one light
+    /// everything else in the app is lit by.
+    private func chip(_ label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label)
+                .font(.custom(Theme.pixelFont, size: 7))
+                .foregroundColor(Theme.Color.timerText.opacity(0.8))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 9)
+                .background(
+                    Capsule().fill(Theme.Color.checkboxBg)
+                        .overlay(Capsule().strokeBorder(Theme.Color.border, lineWidth: 1))
+                )
+                .diurnalElevation(Theme.Elevation.input, shape: Capsule())
+        }
+        .buttonStyle(.plain)
     }
 }
 

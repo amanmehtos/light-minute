@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Only what cannot be said as a build setting.
+
+  `GENERATE_INFOPLIST_FILE` stays on and merges its INFOPLIST_KEY_* values into
+  this file, so the Live Activity and orientation keys are still declared next to
+  the rest of the target's settings. CFBundleURLTypes is an array of dictionaries
+  and has no INFOPLIST_KEY_ spelling, which is the whole reason this file exists.
+
+  The scheme is claimed for `com.lightminute.app:/focus?taskId=…`, the link from
+  Light Week. The OAuth redirect shares it but does not need it declared:
+  ASWebAuthenticationSession intercepts its own callback and the app never sees
+  that URL.
+-->
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.lightminute.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.lightminute.app</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

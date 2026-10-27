@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var vm  = TimerViewModel()
+    @ObservedObject var vm: TimerViewModel
     @StateObject private var sky = DiurnalSky()
     @Environment(\.scenePhase) private var scenePhase
 
@@ -75,7 +75,9 @@ struct TimerScreenView: View {
                 Theme.Color.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    MikeHeaderView(message: vm.mikeMessage, angry: vm.mikeAngry)
+                    MikeHeaderView(message: vm.mikeMessage,
+                                   angry: vm.mikeAngry,
+                                   task: vm.boundTask)
                         .frame(height: headerH, alignment: .top)
 
                     Spacer().frame(height: topSpacer)
@@ -182,4 +184,4 @@ struct TimerScreenView: View {
     }
 }
 
-#Preview { ContentView() }
+#Preview { ContentView(vm: TimerViewModel()) }

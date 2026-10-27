@@ -49,6 +49,24 @@ suspension, backgrounding and termination can't make the clock drift.
 
 **Stays awake.** The screen won't lock while a timer is running.
 
+**Light Week.** Optional, and off until you ask for it. Connect a
+[Light Week](https://light-week.amanmehtos.workers.dev) account and every finished
+focus block is written against the task you were working on — planned time, time
+actually spent, how many times you stopped, and whether you saw it through. Opening a
+task in Light Week hands it to the timer through
+`com.lightminute.app:/focus?taskId=…`, and the task's name sits above MIKE so it is
+obvious what the hour is being filed under.
+
+Abandoned blocks are written too. A timer that records only its successes produces
+statistics that flatter you.
+
+Sessions are queued on the device first and sent afterwards, so a timer on the subway
+is still a timer that counted. The queue survives relaunches and is only dropped once
+the server has acknowledged it, which is safe because a push is idempotent on the op's
+id.
+
+Signing in is never required. With no account the timer is exactly the timer it was.
+
 ---
 
 ## Design
@@ -124,13 +142,18 @@ LightMinute/
 │   │   └── Theme.swift               Adaptive colours via UIColor(dynamicProvider:)
 │   ├── Models/
 │   │   ├── TimerState.swift          Settings + DailyProgress (midnight rollover)
+│   │   ├── BoundTask.swift           The Light Week task a block is counted against
 │   │   └── RestActivityAttributes.swift
 │   ├── Services/
-│   │   └── RestLiveActivity.swift    ActivityKit wrapper
+│   │   ├── RestLiveActivity.swift    ActivityKit wrapper
+│   │   ├── LightWeekAuth.swift       OAuth 2.1 + PKCE; tokens in the Keychain
+│   │   ├── LightWeekClient.swift     The /sync push, and the node id
+│   │   └── FocusOutbox.swift         Durable queue — write first, send later
 │   ├── ViewModels/
 │   │   └── TimerViewModel.swift      Wall-clock anchored timekeeping
 │   ├── Views/                        MikeHeader, PixelButton, PixelTimer,
 │   │                                 SessionDots, Settings
+│   ├── Info.plist                    CFBundleURLTypes only; the rest is generated
 │   ├── Resources/
 │   │   └── PressStart2P-Regular.ttf  The pixel typeface
 │   └── Assets.xcassets/
@@ -147,6 +170,23 @@ LightMinute/
 ## Building
 
 **Requires** Xcode 26.2, iOS 17.0+, Swift 5 language mode.
+
+**And a sibling checkout.** The project links `LightKit` as a local Swift package at
+`../../light-work/apps/ios/LightKit`, so the
+[light-work](https://github.com/amanmehtos/light-work) repo has to sit beside this one:
+
+```
+Documents/
+├── Light Minute/      ← this repo
+└── light-work/
+```
+
+LightKit holds the focus-session model, the hybrid logical clock and the sync wire
+types, and both this app and Light Week for iOS depend on it. The alternative was to
+copy the id and clock encodings into this repo, which is precisely the drift LightKit
+exists to prevent — the padded base-36 clock has to sort identically on both sides or
+conflict resolution quietly stops matching. Without the sibling checkout the package
+fails to resolve and the build stops there.
 
 1. Open `LightMinute/LightMinute.xcodeproj`.
 2. Set your own team under Signing & Capabilities, and change the bundle identifier
@@ -219,6 +259,8 @@ Honest list of what isn't finished.
 | **Weather** | Diurnal softens shadows under cloud. Not implemented — needs real weather data. |
 | **Location** | Longitude is approximated from the device's UTC offset and latitude is fixed at 20°, so shadow bearings are roughly right and precisely wrong. |
 | **Typography** | Press Start 2P instead of the system's Libre Baskerville / IBM Plex Mono — deliberate, see above. |
+| **One sign-in per app** | Light Minute and Light Week sign in separately. A shared Keychain App Group would fix it, and a free Personal Team cannot enable App Groups. |
+| **Reading from Light Week** | The app writes sessions and never reads. There is no task picker — a task arrives by link or not at all — because picking one needs `/sync/pull` and a local replica, which belongs in Light Week's own app. |
 | **Icon packaging** | The built `Info.plist` carries `CFBundleIconName` nested inside `CFBundlePrimaryIcon` but not at the top level, where App Store Connect validation wants it. Harmless here — a free team can't submit anyway — but it would need sorting before any upload. `INFOPLIST_KEY_CFBundleIconName` does not fix it; that prefix only works for keys on Xcode's allowlist. |
 
 ---

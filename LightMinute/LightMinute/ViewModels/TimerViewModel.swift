@@ -20,6 +20,20 @@ class TimerViewModel: ObservableObject {
     @Published var mikeAngry: Bool = false
     @Published var flashScreen: Bool = false
     @Published private(set) var today = DailyProgress.load()
+    /// The Light Week task this focus block is being filed against, if any.
+    @Published private(set) var boundTask: BoundTask?
+
+    // MARK: – Light Week
+    // Both optional, and inert with no account: the timer is a whole timer for
+    // someone who never signs in, and nothing below is allowed to make it wait.
+    let auth: LightWeekAuth
+    let outbox: FocusOutbox
+
+    init() {
+        let auth = LightWeekAuth()
+        self.auth = auth
+        self.outbox = FocusOutbox(auth: auth)
+    }
 
     // MARK: – Wall-clock timekeeping
     // The countdown is derived from real dates, never from accumulated ticks,
@@ -35,6 +49,18 @@ class TimerViewModel: ObservableObject {
 
     private var ticker: Timer?
     private var actualFocusTime: TimeInterval = 0
+    /// When the current focus block began, as against `anchor`, which is only
+    /// the start of the running segment and moves on every pause.
+    private var sessionStart: Date?
+    /// Times this block was stopped part-way. Not incremented on backgrounding,
+    /// even though Light Week counts that as an interruption: with Flip Focus
+    /// on, putting the phone face-down locks the screen, so every intended
+    /// minute of focus would arrive looking like one.
+    private var interruptions: Int = 0
+    /// A length this one session was asked to run for by a Light Week link. The
+    /// user's focus length is a setting; a link gets to say "this one is 45
+    /// minutes" without rewriting it.
+    private var linkedDuration: TimeInterval?
     private let liveActivity = RestLiveActivity()
     private let motion = CMMotionManager()
     private var lastFaceDown: Bool = false
@@ -71,6 +97,7 @@ class TimerViewModel: ObservableObject {
         settings.dailyTarget = DailyProgress.loadTarget() ?? settings.dailyTarget
         today.refresh()
         if settings.flipFocus { startFlipDetection() }
+        flushOutbox()
     }
 
     func onDisappear() {
@@ -82,6 +109,7 @@ class TimerViewModel: ObservableObject {
         if status == .running { startTicker() }
         today.refresh()          // the app may have been away across midnight
         refresh()
+        flushOutbox()
     }
 
     func onBackground() {
@@ -93,11 +121,13 @@ class TimerViewModel: ObservableObject {
 
     func start() {
         if status == .idle && mode == .focus {
-            modeDuration = settings.focusDuration
-            accumulated  = 0
-            didSignalEnd = false
-            isOverflow   = false
-            overflowTime = 0
+            modeDuration  = linkedDuration ?? settings.focusDuration
+            accumulated   = 0
+            didSignalEnd  = false
+            isOverflow    = false
+            overflowTime  = 0
+            sessionStart  = Date()
+            interruptions = 0
         }
         status    = .running
         mikeAngry = false
@@ -116,14 +146,23 @@ class TimerViewModel: ObservableObject {
 
     func reset() {
         stopTicker()
+        // Before the evidence goes. A timer that records only its successes
+        // produces statistics that flatter you, so a block given up part-way
+        // through is written down as abandoned — and one that had already run
+        // past its target as completed, because it had been.
+        if mode == .focus, status != .idle {
+            record(focused: elapsed,
+                   outcome: elapsed >= modeDuration ? .completed : .abandoned)
+        }
         liveActivity.stop()
         cancelRestNotification()
         anchor = nil; accumulated = 0; didSignalEnd = false
+        sessionStart = nil; interruptions = 0
         status     = .idle
         mode       = .focus
         isOverflow = false; overflowTime = 0; actualFocusTime = 0
-        modeDuration  = settings.focusDuration
-        timeRemaining = settings.focusDuration
+        modeDuration  = linkedDuration ?? settings.focusDuration
+        timeRemaining = modeDuration
         mikeAngry = false
         mikeMessage = idleMessages.randomElement()!
         if settings.flipFocus { startFlipDetection() }
@@ -158,6 +197,64 @@ class TimerViewModel: ObservableObject {
         if settings.flipFocus { startFlipDetection() }
     }
 
+    // MARK: – Light Week
+
+    /// A link from Light Week: `com.lightminute.app:/focus?taskId=…`.
+    ///
+    /// Binds the task it names so the next finished block is filed against it.
+    /// Unknown links are ignored rather than complained about — the scheme is
+    /// shared with the sign-in callback, and one day with whatever comes next.
+    func open(_ url: URL) {
+        guard let task = BoundTask(focusURL: url) else { return }
+        boundTask      = task
+        linkedDuration = task.plannedSeconds.map(TimeInterval.init)
+        if mode == .focus, status == .idle {
+            modeDuration  = linkedDuration ?? settings.focusDuration
+            timeRemaining = modeDuration
+        }
+        if showSettings { closeSettings() }
+        mikeMessage = boundMessages.randomElement()!
+    }
+
+    /// Stops counting against the task, without disturbing the timer.
+    func unbind() {
+        boundTask      = nil
+        linkedDuration = nil
+        if mode == .focus, status == .idle {
+            modeDuration  = settings.focusDuration
+            timeRemaining = modeDuration
+        }
+    }
+
+    /// Disconnects the account and gives up anything still queued for it.
+    func disconnectLightWeek() {
+        auth.signOut()
+        outbox.discard()
+    }
+
+    /// Hands a focus block to the outbox.
+    ///
+    /// Under a minute is a mis-tap rather than a session. The dial is adjusted
+    /// in whole minutes and every adjustment calls `reset()`, so recording
+    /// those would fill the account with noise instead of with the honest
+    /// abandonments it is there to keep.
+    private func record(focused: TimeInterval, outcome: FocusOutbox.Outcome) {
+        guard focused >= 60 else { return }
+        outbox.enqueue(
+            mode: mode,
+            outcome: outcome,
+            task: boundTask,
+            startedAt: sessionStart ?? Date().addingTimeInterval(-focused),
+            endedAt: Date(),
+            plannedSeconds: Int(modeDuration.rounded()),
+            focusedSeconds: Int(focused.rounded()),
+            interruptions: interruptions)
+    }
+
+    private func flushOutbox() {
+        Task { await outbox.flush() }
+    }
+
     // MARK: – Mode transitions
 
     private func beginRest() {
@@ -165,7 +262,11 @@ class TimerViewModel: ObservableObject {
         isOverflow = false; overflowTime = 0
         completedSessions += 1
 
-        // A finished focus block is what counts toward the day's target.
+        // A finished focus block is what counts toward the day's target — and
+        // what Light Week wants. `elapsed` rather than `actualFocusTime`: that
+        // one is floored to the focus length for the sake of proportional rest,
+        // and the gap between planned and spent is the interesting part here.
+        record(focused: elapsed, outcome: .completed)
         let alreadyMet = targetReached
         today.increment()
         let justHitTarget = !alreadyMet && targetReached
@@ -199,8 +300,9 @@ class TimerViewModel: ObservableObject {
         anchor = nil; accumulated = 0; didSignalEnd = false
         mode = .focus
         isOverflow = false; overflowTime = 0; actualFocusTime = 0
-        modeDuration  = settings.focusDuration
-        timeRemaining = settings.focusDuration
+        sessionStart = nil; interruptions = 0
+        modeDuration  = linkedDuration ?? settings.focusDuration
+        timeRemaining = modeDuration
         status = .idle
         mikeMessage = backToFocusMsgs.randomElement()!
         if settings.flipFocus { startFlipDetection() }
@@ -246,6 +348,8 @@ class TimerViewModel: ObservableObject {
         // Focus length edited while idle → reflect it on the dial
         if settings.focusDuration != old.focusDuration,
            mode == .focus, status == .idle {
+            // Setting it by hand is the last word on it, link or no link.
+            linkedDuration = nil
             modeDuration  = settings.focusDuration
             timeRemaining = settings.focusDuration
         }
@@ -260,6 +364,12 @@ class TimerViewModel: ObservableObject {
         if let a = anchor {
             accumulated += Date().timeIntervalSince(a)
             anchor = nil
+            // Counted here rather than in `pause()` so that every way of
+            // stopping a block mid-way counts the same: the pause control, a
+            // face-up phone, opening settings. The time is excluded from the
+            // recording in all three cases, and counting only one of them
+            // would leave the two halves of the session disagreeing.
+            if mode == .focus, status == .running { interruptions += 1 }
         }
     }
 
@@ -393,5 +503,6 @@ class TimerViewModel: ObservableObject {
     private let restMessages      = ["Rest earned! Proportional to your flow.", "Recharging... you earned this.", "Flow complete. Rest up, astronaut."]
     private let backToFocusMsgs   = ["Break's over. Back to orbit!", "Recharged. Ready for liftoff?", "Rest complete. Focus awaits."]
     private let settingsMsgs      = ["\"LONG BREAK\" is after all your sessions.", "Adjust your mission parameters here."]
+    private let boundMessages     = ["Target acquired. Face it down and go.", "Mission assigned. Ready when you are.", "Locked on. Let's log some time."]
     private let angryMessages     = ["Hey! You peeked! Face it down again!", "No cheating! Back to work!", "Eyes off! Put it face-down!", "Put it face-down and focus!"]
 }
