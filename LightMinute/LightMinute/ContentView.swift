@@ -84,8 +84,15 @@ struct TimerScreenView: View {
                         // masked at its bottom and sides but not its top, so
                         // starting it below the safe area leaves a hard edge
                         // exactly where the sky should be most open.
-                        SkyHeader(height: .points(headerH))
+                        //
+                        // It is also taller than the header it sits behind. At
+                        // the header's own height the whole sky landed above
+                        // the Dynamic Island, where there is nothing to see it
+                        // against; the extra reach puts the weather on screen
+                        // and lets the fade finish well below the island.
+                        SkyHeader(height: .points(headerH + 180))
                             .ignoresSafeArea(edges: .top)
+                            .allowsHitTesting(false)
                         MikeHeaderView(message: vm.mikeMessage,
                                        angry: vm.mikeAngry,
                                        focus: vm.focusLine)
