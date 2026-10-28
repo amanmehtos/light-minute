@@ -1,4 +1,5 @@
 import SwiftUI
+import DiurnalUI
 
 struct ContentView: View {
     @ObservedObject var vm: TimerViewModel
@@ -75,10 +76,21 @@ struct TimerScreenView: View {
                 Theme.Color.background.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    MikeHeaderView(message: vm.mikeMessage,
-                                   angry: vm.mikeAngry,
-                                   task: vm.boundTask)
-                        .frame(height: headerH, alignment: .top)
+                    // The weather outside, behind what this hour is for. The
+                    // band fades out downward, so there is no edge between the
+                    // sky and the timer below it.
+                    ZStack(alignment: .top) {
+                        // Runs up under the status bar on purpose: the band is
+                        // masked at its bottom and sides but not its top, so
+                        // starting it below the safe area leaves a hard edge
+                        // exactly where the sky should be most open.
+                        SkyHeader(height: .points(headerH))
+                            .ignoresSafeArea(edges: .top)
+                        MikeHeaderView(message: vm.mikeMessage,
+                                       angry: vm.mikeAngry,
+                                       focus: vm.focusLine)
+                    }
+                    .frame(height: headerH, alignment: .top)
 
                     Spacer().frame(height: topSpacer)
 

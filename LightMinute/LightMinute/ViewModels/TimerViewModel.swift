@@ -87,6 +87,23 @@ class TimerViewModel: ObservableObject {
 
     var currentModeDuration: TimeInterval { modeDuration }
 
+    /// What this stretch of time is being filed under, in one line.
+    ///
+    /// The bound Light Week task when there is one, because that is the whole
+    /// point of binding it. Otherwise what the timer is doing — a header that
+    /// goes blank when nothing is bound reads as broken rather than as idle.
+    var focusLine: String {
+        if let boundTask {
+            let parts = [boundTask.projectName, boundTask.title].compactMap { $0 }
+            return parts.joined(separator: " · ").uppercased()
+        }
+        switch mode {
+        case .focus: return isOverflow ? "FLOW STATE" : "FOCUS"
+        case .shortRest: return "SHORT REST"
+        case .longRest: return "LONG REST"
+        }
+    }
+
     // MARK: – Lifecycle
 
     func onAppear() {

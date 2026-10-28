@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DUIB /* DiurnalUI in Frameworks */ = {isa = PBXBuildFile; productRef = DUIP /* DiurnalUI */; };
 		A101 /* LightMinuteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A001 /* LightMinuteApp.swift */; };
 		A102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A002 /* ContentView.swift */; };
 		A103 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003 /* TimerViewModel.swift */; };
@@ -82,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DUIB /* DiurnalUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,6 +236,7 @@
 			name = LightMinute;
 			packageProductDependencies = (
 				APKP /* LightKit */,
+				DUIP /* DiurnalUI */,
 			);
 			productName = LightMinute;
 			productReference = APROJ /* LightMinute.app */;
@@ -285,6 +288,7 @@
 			mainGroup = AGRP;
 			packageReferences = (
 				APKR /* XCLocalSwiftPackageReference "LightKit" */,
+				DUIR /* XCLocalSwiftPackageReference "DiurnalUI" */,
 			);
 			productRefGroup = APRD /* Products */;
 			projectDirPath = "";
@@ -366,6 +370,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		DUIR /* XCLocalSwiftPackageReference "DiurnalUI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../../light-work/vendor/diurnal-ui/swift/DiurnalUI";
+		};
 		APKR /* XCLocalSwiftPackageReference "LightKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = "../../light-work/apps/ios/LightKit";
@@ -373,6 +381,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DUIP /* DiurnalUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DiurnalUI;
+		};
 		APKP /* LightKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LightKit;
